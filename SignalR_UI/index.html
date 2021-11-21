@@ -1,0 +1,107 @@
+<html lang="en">
+    <head>
+        <script src="signalr.min.js"></script>
+        <script src="jquerry.min.js"></script>
+        <script>
+            $(document).ready(()=>{
+                const connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:5001/myhub").withAutomaticReconnect().build();
+                async function start(){
+                    try{
+                        await connection.start();
+                    }
+                    catch(error){
+                        setTimeout(()=> start(),2000);
+                    }
+                }
+                start();
+                
+                const status = $("#status");
+
+                connection.onreconnecting((error)=>{
+                    status.css("display", "block");
+                    status.css("background-color","blue");
+                    status.css("color","white");
+                    status.html("Baglanti yaradilir...");
+                    status.fadeIn(2000, ()=>{
+                        setTimeout(() => {
+                            status.fadeOut(2000);
+                        }, 2000);
+                    });
+                });
+
+                connection.onreconnected((connectionId)=>{
+                    status.css("display", "block");
+                    status.css("background-color","green");
+                    status.html(connectionId + " - Baglanti yaradildi!");
+                    status.css("color","white");
+                    status.fadeIn(2000, ()=>{
+                        setTimeout(() => {
+                            status.fadeOut(2000);
+                        }, 2000);
+                    });
+                });
+
+                connection.onclose((error)=>{
+                    status.css("display", "block");
+                    status.css("background-color","red");
+                    status.css("color","white");
+                    status.html("Baglanti qurula bilmedi :(");
+                    status.fadeIn(2000, ()=>{
+                        setTimeout(() => {
+                            status.fadeOut(2000);
+                        }, 2000);
+                    });
+                });
+
+                $("#btnGonder").click(()=>{
+                    let message = $("#txtGonder").val();
+                    connection.invoke("SendMessageAsync", message).catch(err=>console.log(err));
+                });
+
+                connection.on("receiveMessage",data=>{
+                    $("#listData").append(data + "<br>");
+                });
+                const usersList = $("#users");
+                connection.on("userJoined",users =>{
+                    console.log(users);
+                    let text="";
+                    $.each(users, (index,item)=>{
+                        console.log(999999);
+                        text +="<li>" +item + "</li>";
+                    });
+                    console.log(text);
+                    usersList.append(text);
+                });
+
+                connection.on("userLeft",users =>{
+                    usersList.html("");
+                    console.log(users);
+                    let text="";
+                    $.each(users, (index,item)=>{
+                        console.log(999999);
+                        text +="<li>" +item + "</li>";
+                    });
+                    console.log(text);
+                    usersList.append(text);
+                });
+            });
+
+            
+        </script>
+    </head>
+    <body>
+        <div id="status" style="display: none;"></div>
+        <div>
+            <ul id="users">
+
+            </ul>
+        </div>
+        <div id="listData">
+
+        </div>
+        <br>
+        <input type="text" id="txtGonder">
+        <br>
+        <button id="btnGonder">Gonder</button>
+    </body>
+</html>
