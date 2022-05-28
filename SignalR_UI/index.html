@@ -55,7 +55,14 @@
 
                 $("#btnGonder").click(()=>{
                     let message = $("#txtGonder").val();
-                    connection.invoke("SendMessageAsync", message).catch(err=>console.log(err));
+                    let cId = $("#connectionIdGonder").val().split(",");
+                    connection.invoke("SendMessageAsync", message, cId).catch(err=>console.log(err));
+                });
+
+                $("#btnGroupGonder").click(()=>{
+                    let message = $("#txtGonder").val();
+                    let groupName = $("input[name=group]:checked").val();
+                    connection.invoke("SendMessageAsync", message, groupName).catch(err=>console.log(err));
                 });
 
                 connection.on("receiveMessage",data=>{
@@ -85,9 +92,16 @@
                     usersList.append(text);
                 });
 
+                let myConnectionId = "";
 
                 connection.on("getConnectionId",data=>{
+                    myConnectionId = data;
                     $("#connectionId").html(data + "<br>");
+                });
+
+                $("#btnGroup").click(()=>{
+                    let groupName = $("input[name=group]:checked").val();
+                    connection.invoke("addGroup", myConnectionId, groupName).catch(err=>console.log(err));
                 });
             });
 
@@ -98,6 +112,15 @@
         <div id="connectionId" style="background-color: red; color: aliceblue;">
             
         </div>
+        <br><br>
+        <input type="radio" name="group" value="A"> A
+        <input type="radio" name="group" value="B"> B
+        <input type="radio" name="group" value="C"> C
+        <br> <br>
+        <button id="btnGroup">Qrupa daxil ol</button>
+        <br>
+        <br>
+        
         <div id="status" style="display: none;"></div>
         <div>
             <ul id="users">
@@ -108,8 +131,12 @@
 
         </div>
         <br>
-        <input type="text" id="txtGonder">
+        <input type="text" id="txtGonder" placeholder="text">
+        <br>
+        <input type="text" id="connectionIdGonder" placeholder="Connection Id">
         <br>
         <button id="btnGonder">Gonder</button>
+        <br><br>
+        <button id="btnGroupGonder">Qrupa Gonder</button>
     </body>
 </html>
