@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SignalR.Business;
 using SignalR.Hubs;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,13 @@ namespace SignalR
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<MyBusiness>();
             services.AddSignalR();
             services.AddCors(options => options.AddDefaultPolicy(builder =>
             {
                 builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(o => true);
             }));
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +40,8 @@ namespace SignalR
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<MyHub>("/myhub");
+                endpoints.MapHub<MessageHub>("/messagehub");
+                endpoints.MapControllers();
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Hello World!");

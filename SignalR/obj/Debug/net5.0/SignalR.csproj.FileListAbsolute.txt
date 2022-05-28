@@ -7,7 +7,6 @@ C:\Users\cafarovr\source\repos\SignalR\SignalR\bin\Debug\net5.0\SignalR.runtimec
 C:\Users\cafarovr\source\repos\SignalR\SignalR\bin\Debug\net5.0\SignalR.dll
 C:\Users\cafarovr\source\repos\SignalR\SignalR\bin\Debug\net5.0\ref\SignalR.dll
 C:\Users\cafarovr\source\repos\SignalR\SignalR\bin\Debug\net5.0\SignalR.pdb
-C:\Users\cafarovr\source\repos\SignalR\SignalR\obj\Debug\net5.0\SignalR.csprojAssemblyReference.cache
 C:\Users\cafarovr\source\repos\SignalR\SignalR\obj\Debug\net5.0\SignalR.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\cafarovr\source\repos\SignalR\SignalR\obj\Debug\net5.0\SignalR.AssemblyInfoInputs.cache
 C:\Users\cafarovr\source\repos\SignalR\SignalR\obj\Debug\net5.0\SignalR.AssemblyInfo.cs

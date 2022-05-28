@@ -9,10 +9,6 @@ namespace SignalR.Hubs
     public class MyHub : Hub
     {
         static List<string> Users = new List<string>();
-        public async Task SendMessageAsync(string message)
-        {
-            await Clients.All.SendAsync("receiveMessage",message);
-        }
 
         public override async Task OnConnectedAsync()
         {
